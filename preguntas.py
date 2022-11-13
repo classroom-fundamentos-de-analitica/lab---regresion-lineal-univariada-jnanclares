@@ -15,7 +15,7 @@ def pregunta_01():
     Complete el código presentado a continuación.
     """
     # Lea el archivo `gm_2008_region.csv` y asignelo al DataFrame `df`
-    df = pd.read_csv("gm_2008_regions.csv")
+    df = pd.read_csv("gm_2008_region.csv")
 
     # Asigne la columna "life" a `y` y la columna "fertility" a `X`
     y = df["life"]
@@ -28,10 +28,10 @@ def pregunta_01():
     print(X.shape)
 
     # Transforme `y` a un array de numpy usando reshape
-    y_reshaped = y.reshape(y, -1)
+    y_reshaped = y.values.reshape(-1, 1)
 
     # Trasforme `X` a un array de numpy usando reshape
-    X_reshaped = X.reshape(X, -1)
+    X_reshaped = X.values.reshape(-1, 1)
 
     # Imprima las nuevas dimensiones de `y`
     print(y_reshaped.shape)
@@ -70,31 +70,27 @@ def pregunta_03():
     Entrenamiento del modelo sobre todo el conjunto de datos.
     Complete el código presentado a continuación.
     """
+    df = pd.read_csv("gm_2008_region.csv")
 
-    # Lea el archivo `gm_2008_region.csv` y asignelo al DataFrame `df`
-    df = pd.read_csv("gm_2008_regions.csv")
 
     # Asigne a la variable los valores de la columna `fertility`
-    X_fertility = df["fertility"]
+    X_fertility = df["fertility"].values.reshape(-1,1)
 
     # Asigne a la variable los valores de la columna `life`
-    y_life = df["life"]
+    y_life = df["life"].values.reshape(-1,1)
 
     # Importe LinearRegression
-    from sklearn import linear_model
-    from sklearn.metrics import mean_squared_error, r2_score
-
+    from sklearn.linear_model import LinearRegression
 
     # Cree una instancia del modelo de regresión lineal
-    reg = linear_model.LinearRegression()
+    reg = LinearRegression()
 
     # Cree El espacio de predicción. Esto es, use linspace para crear
     # un vector con valores entre el máximo y el mínimo de X_fertility
     prediction_space = np.linspace(
-        min(df.fertility),
-        max(df.fertility),
-    ).reshape(prediction_space, -1)
-
+            min(X_fertility),
+            max(X_fertility)
+        ).reshape(-1,1)
     # Entrene el modelo usando X_fertility y y_life
     reg.fit(X_fertility, y_life)
 
@@ -102,7 +98,7 @@ def pregunta_03():
     y_pred = reg.predict(prediction_space)
 
     # Imprima el R^2 del modelo con 4 decimales
-    print(r2_score(y_life, y_pred).round(4))
+    print(reg.score(X_fertility, y_life).round(4))
 
 
 def pregunta_04():
@@ -119,13 +115,14 @@ def pregunta_04():
     from sklearn.model_selection import train_test_split
 
     # Lea el archivo `gm_2008_region.csv` y asignelo al DataFrame `df`
-    df = pd.read_csv("gm_2008_regions.csv")
+    df = pd.read_csv("gm_2008_region.csv")
+
 
     # Asigne a la variable los valores de la columna `fertility`
-    X_fertility = df["fertility"]
+    X_fertility = df["fertility"].values.reshape(-1,1)
 
     # Asigne a la variable los valores de la columna `life`
-    y_life = df["life"]
+    y_life = df["life"].values.reshape(-1,1)
 
     # Divida los datos de entrenamiento y prueba. La semilla del generador de números
     # aleatorios es 53. El tamaño de la muestra de entrenamiento es del 80%
